@@ -19,6 +19,19 @@
 #   CHATTER SUGGEST: TUI - Terminal User Interface
 #   TARGET SITE: https://webscraper.io/test-sites
 
+# TODO url validation
+# TODO request error handling
+# TODO primary search user input validation
+# TODO data parse user input validation
+# TODO data parse get text AND attributes
+# TODO handle pagenition
+# TODO error handline for missing data
+# TODO README.md
+# TODO user specify output file and output type
+# TODO text ouput dynamic column widths, width of longest value + 2 per column
+# TODO move help menu from hardcode to text file, loads in on app start.
+# TODO Dockerize
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -113,7 +126,6 @@ def newSearch():
     data_results = getDataResults(data_input, primary_results)
 
     print(formatData(data_results))
-
 
 def app():
     """Main App Function for Web Scraper Tool."""
