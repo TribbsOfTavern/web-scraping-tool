@@ -22,27 +22,6 @@
 import requests
 from bs4 import BeautifulSoup
 
-def parseTargetElementsInput(data:str) -> list[dict]:    
-    targets = data.split("|")
-
-    for i, each in enumerate(targets):
-        targets[i] = each.strip().split(' ', 1)
-
-    for i, each in enumerate(targets):
-        each[1] = each[1].replace('"', "").split('=', 1)             
-
-    els = []
-    for target in targets:
-        new_target = {}
-        new_target['el'] = target[0] 
-        new_target['type'] = target[1][0]
-        new_target['filter'] = target[1][1]
-        els.append(new_target)
-            
-    for each in els:
-        print(each)        
-    return els
-
 def getPrimaryResults(ins:str, soup:BeautifulSoup) -> list:
     """Parse primary search command and return resulting data from search."""
     ins = ins.split(' ', 1)
@@ -77,21 +56,22 @@ def formatData(data:list[dict], width:int=20) -> str:
     """Format data into text columns"""
     text = ""
     for k in data[0].keys():
-        text+=f"{k:<width}"
+        text+=f"{k:<{width}}"
     text += "\n"
     for each in data:
         for k, v in each.items():
-            text += f"{v:<width}"
+            text += f"{v:<{width}}"
         text += "\n"
 
     return text
 
 def app():
     """Main App Function for Web Scraper Tool."""
-    test_url = "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops"
-    
+    #test_url = "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops"
+
+    target_url = input("Enter target url: ")
     try:
-        page = requests.get(test_url)
+        page = requests.get(target_url)
     except Exception as e:
         print("Error occured when fetching page: ", e)
         exit()
