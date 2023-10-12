@@ -36,13 +36,32 @@ import requests
 from bs4 import BeautifulSoup
 
 def getPrimaryResults(ins:str, soup:BeautifulSoup) -> list:
-    """Parse primary search command and return resulting data from search."""
+    """
+    Parse primary search command and return resulting data from search.
+    
+    params:
+        ins : str - String input should be a primary target.
+        soup : bs4.BeautifulSoup - BeautifulSoup class for primary target.
+    return:
+        list[bs4.element.Tag] - Returns list of class bs4.element.Tag
+    """
+    
     ins = ins.split(' ', 1)
     ins[1] = ins[1].replace('"', '').strip().split('=')
     return soup.find_all(ins[0], class_=ins[1][1])
     
 def getDataResults(ins:str, pres:list) -> list:
-    """Parse data search parameters and return resuling data."""
+    """
+    Parse data search parameters and return resuling data.
+    
+    params:
+        ins : str - String input should be a series of targetted tags with valid application
+            syntax.
+        pres: list[bs4.element.Tag] - List of bs4.element.Tag class objects.
+    return:    
+        list[dict] - Returns a list of parsed data, each dict containing key of the command title,
+        and value containing the parsed data.
+    """
     ins = ins.split('|')
     ins = [x.replace('"', '').strip() for x in ins]
     
@@ -66,7 +85,16 @@ def getDataResults(ins:str, pres:list) -> list:
     return results
 
 def formatData(data:list[dict], width:int=20) -> str:
-    """Format data into text columns"""
+    """
+    Format data into text columns
+    
+    params:
+        data : list[dict] - List of dicts.
+        width : int - default 20 - width columns should be formatted to.
+    returns:
+        str - Contains the formatted text string of data.
+    """
+    
     text = ""
     for k in data[0].keys():
         text+=f"{k:<{width}}"
@@ -100,6 +128,9 @@ def displayHelp():
     print(text)
 
 def displayMenu():
+    """
+    Display the menu of options for the applications
+    """
     text=""
     text+= f'{"Web Scraper Tool":_^40}\n'
     text+= '\t1.) Start New Search\n'
@@ -108,6 +139,15 @@ def displayMenu():
     print(text)
 
 def newSearch():
+    """
+    Perform a new web scrape action.
+    User will be required to provide a target url.
+    User will be required to provide a primary target syntax.
+    User will be required to provide a parsing syntax.
+    
+    Successful output will result in a formatted string output to console.
+    """
+    
     #test_url = "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops"
 
     target_url = input("Enter target url: ")
@@ -128,7 +168,9 @@ def newSearch():
     print(formatData(data_results))
 
 def app():
-    """Main App Function for Web Scraper Tool."""
+    """
+    Main App Function for Web Scraper Tool.
+    """
     
     exit_app = False
     while not exit_app:
