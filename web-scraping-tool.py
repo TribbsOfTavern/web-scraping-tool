@@ -65,8 +65,36 @@ def formatData(data:list[dict], width:int=20) -> str:
 
     return text
 
-def app():
-    """Main App Function for Web Scraper Tool."""
+
+def displayHelp():
+    text="""
+    - URL must be a valid URL
+    
+    - Primary Container Syntax:
+        <element> class="<class name>"
+        Ex: div class="card-container"
+
+    -Data Parsing Syntax:
+    - You can look for a single item within the primary containers:
+        <data title>:<element> class="<class name>"
+        Ex: TITLE:h4 class="card-title"
+    - Or you can look for multiples of data within the primary container:
+        <data title>:<element> class="<class name>" | <data title 2>:<element> class="<class name">
+        Ex: TITLE:h4 class="card-title" | DESC:p class="description centered"
+
+    - Information gathered will format into the columns specified by the title of the data collected.
+"""
+    print(text)
+
+def displayMenu():
+    text=""
+    text+= f'{"Web Scraper Tool":_^40}\n'
+    text+= '\t1.) Start New Search\n'
+    text+= '\t2.) View Help\n'
+    text+= '\t0.) Exit App\n'
+    print(text)
+
+def newSearch():
     #test_url = "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops"
 
     target_url = input("Enter target url: ")
@@ -80,10 +108,31 @@ def app():
     primary_input = input("Enter primary container target: ")
     primary_results = getPrimaryResults(primary_input, soup)    
     
+    
     data_input = input("Enter target data: ")
     data_results = getDataResults(data_input, primary_results)
 
     print(formatData(data_results))
+
+
+def app():
+    """Main App Function for Web Scraper Tool."""
+    
+    exit_app = False
+    while not exit_app:
+        displayMenu()
+        opt = input(">> ")
+        match opt:
+            case "0":
+                exit_app = True
+            case "1":
+                newSearch()
+            case "2":
+                displayHelp()
+            case _:
+                pass
+            
+    print("Exiting Web Scraper Tool...")
     
 if __name__ == "__main__":
     app()
