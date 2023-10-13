@@ -17,15 +17,15 @@
 #   
 #   CHATTER SUGGEST: Dockerize
 #   CHATTER SUGGEST: TUI - Terminal User Interface
-#   TARGET SITE: https://webscraper.io/test-sites
-
-# TODO url validation
-# TODO request error handling
-# TODO primary search user input validation
-# TODO data parse user input validation
+#   TEST SITE: https://webscraper.io/test-sites
+#   TARGET URL: https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops
+#-- TODO url validation
+#-- TODO request error handling
+#-- TODO primary search user input validation
+# TODO data parse target data input validation
 # TODO data parse get text AND attributes
 # TODO handle pagenition
-# TODO error handline for missing data
+# TODO error handling for missing data
 # TODO README.md
 # TODO user specify output file and output type
 # TODO text ouput dynamic column widths, width of longest value + 2 per column
@@ -33,7 +33,25 @@
 # TODO Dockerize
 
 import requests
+import re
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
+def validURL(url:str) -> bool:
+    """
+    Given a str will check if it is a valid url entry and return a bool.
+    This does not check if the url is a valid landing site, only syntax.
+    
+    params:
+        url : str - String input to check for valid url syntax
+    return:
+        bool - True if url string was valid syntax otherwise False
+    """
+    parsed = urlparse(url)
+    if (parsed.scheme == "http" or parsed.scheme == "https") and parsed.netloc:
+        return True
+    else:
+        return False
 
 def getPrimaryResults(ins:str, soup:BeautifulSoup) -> list:
     """
@@ -45,11 +63,28 @@ def getPrimaryResults(ins:str, soup:BeautifulSoup) -> list:
     return:
         list[bs4.element.Tag] - Returns list of class bs4.element.Tag
     """
-    
+    if not validPrimaryCmd(ins): raise Exception("Invalid primary target cmd syntax.")
     ins = ins.split(' ', 1)
     ins[1] = ins[1].replace('"', '').strip().split('=')
     return soup.find_all(ins[0], class_=ins[1][1])
-    
+
+def validPrimaryCmd(cmd:str) -> bool:
+    """
+    Check if the primary command is a valid syntax.
+    This does not check if its proper data to fetch.
+        
+    params:
+        cmd : str - String input from the user that should be primary data search command.
+    return:
+        bool - True if correct syntax otherwise False
+    """
+    pattern = "^(\w)+:(\w)+ class=\"(\w|\w )+\"$"
+    result = re.findall(pattern, cmd)
+    if result:
+        return True
+    else:
+        return False
+
 def getDataResults(ins:str, pres:list) -> list:
     """
     Parse data search parameters and return resuling data.
@@ -94,7 +129,6 @@ def formatData(data:list[dict], width:int=20) -> str:
     returns:
         str - Contains the formatted text string of data.
     """
-    
     text = ""
     for k in data[0].keys():
         text+=f"{k:<{width}}"
@@ -105,7 +139,6 @@ def formatData(data:list[dict], width:int=20) -> str:
         text += "\n"
 
     return text
-
 
 def displayHelp():
     text="""
@@ -147,21 +180,19 @@ def newSearch():
     
     Successful output will result in a formatted string output to console.
     """
-    
-    #test_url = "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops"
-
-    target_url = input("Enter target url: ")
+    target_url = input("Enter full target url: ")
     try:
+        if not validURL(target_url): raise Exception("Invalid URL syntax. HTTP or HTTPS must be included in the target URL.")
         page = requests.get(target_url)
+        if page.status_code != "200": raise Exception("Failed to get response. Response code: ", page.status_code)
     except Exception as e:
-        print("Error occured when fetching page: ", e)
+        print("ERROR: ", e)
         exit()
     soup = BeautifulSoup(page.content, "html.parser")
     
     primary_input = input("Enter primary container target: ")
     primary_results = getPrimaryResults(primary_input, soup)    
-    
-    
+        
     data_input = input("Enter target data: ")
     data_results = getDataResults(data_input, primary_results)
 
@@ -171,7 +202,6 @@ def app():
     """
     Main App Function for Web Scraper Tool.
     """
-    
     exit_app = False
     while not exit_app:
         displayMenu()
