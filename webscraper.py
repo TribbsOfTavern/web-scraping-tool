@@ -89,6 +89,8 @@ def app():
     exit_app = False
     curr_soup = None
     curr_target = None
+    curr_target_cmd = None
+    curr_data_commands = None
 
     while not exit_app:
         displayMenu()
@@ -97,8 +99,13 @@ def app():
             case "0":
                 exit_app = True
             case "1":
-                #Todo perform new search
-                pass
+                validity = True
+                while validity:
+                    pass
+                    # Ask user for a target url
+                    # Ask user for primary target search
+                    # Ask user for data parse commands
+                    # Ask user for preffered output method
             case "2":
                 displayHelp()
             case _:
