@@ -8,32 +8,28 @@
 #   3. Define what type of data you want to scrape.
 #   4. Implement error handling to gracefully handle situations like failed requests, missing data,
 #      or changes in the website's structure.
-#  5. Organize the scraped data and display it in a structured format such as a list, table, or CSV file
+#   5. Organize the scraped data and display it in a structured format such as a list, table, or CSV file
 #   6. Allow the user to specify the number of pages to scrape (if applicacable) and the data to
 #       extract (e.g. new headlines from different categories)
-#  7. Provide a command line interface that allows the user to input the website URL to specify scraping parameters
+#   7. Provide a command line interface that allows the user to input the website URL to specify scraping parameters
 #   
 #   OPTIONAL: Save the scrapped, formatted data to a file.
 #   OPTIONAL: Add handling for different file types
 #       Currently: JSON TXT CSV
 #   
-#   CHATTER SUGGEST: Dockerize
+#   CHATTER SUGGEST: Dockerize 
 #   CHATTER SUGGEST: TUI - Terminal User Interface
 #   TEST SITE: https://webscraper.io/test-sites
 #   TARGET URL: https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops
 #      PRIMARY ELEMENT: div class="card-body"
 #      DATA CMDS: name:a class="title" | price:h4 class="float-end price card-title pull-right" | desc:p class="description card-text"
-#-- TODO url validation
-#-- TODO request error handling
-#-- TODO primary search user input validation
-#-- TODO data parse target data input validation
-#-- TODO data parse get text AND attributes
-#-- TODO handle pagenition
-#-- TODO error handling for missing data
 # TODO README.md
-#-- TODO user specify output file and output type
-#-- TODO move help menu from hardcode to text file, loads in on app start.
 # TODO Dockerize
+# TODO Handle AJAZ Pagination
+# TODO Handle Load For More Button
+# TODO Handle infinite scrolling
+# TODO Add Rate Limiting Specifications
+
 
 import requests
 import re
