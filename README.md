@@ -46,5 +46,5 @@ A whole lot of data validation, a whole lot of input parsing, and a little regex
 - [ ] Dockerize
 - [ ] Handle AJAZ Pagination
 - [ ] Handle Load For More Button
-- [ ] Handle infinite scrolling
+- [ ] Handle Infinite scrolling
 - [ ] Add Rate Limiting Specifications
